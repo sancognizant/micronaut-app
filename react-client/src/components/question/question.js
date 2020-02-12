@@ -4,6 +4,7 @@ import { randomQuestion, postResult } from "../../utils/service";
 import Remarks from "../remarks/remarks";
 import { connect } from "react-redux";
 import * as actionTypes from "../../store/actions";
+import {fetchGameStats} from '../../store/actions';
 
 const Question = props => {
   const [question, setQuestion] = useState({});
@@ -13,6 +14,7 @@ const Question = props => {
   const [inputStyle, setInputStyle] = useState({ border: "gray solid 1px" });
   const [count, setCount] = useState(0);
   const [isDisable, SetIsDisable] = useState(false);
+ 
 
   useEffect(() => {
     randomQuestion(count).then(response => {
@@ -34,21 +36,18 @@ const Question = props => {
     const result = postResult(payLoad);
     result.then(data => {
       props.onAttempt(data);
-      props.getUserId(data.userId);
+      props.fetchGameStats(data.userId);
     });
 
     if (count <= 7) {
       if (alias) {
+        randomQuestion(count).then(response => {
+            setQuestion(response);
+        });
         setInputStyle({ border: "gray solid 1px" });
         if (parseInt(answer) === parseInt(question.answer)) {
           setAnswerDetails("Your answer is correct");
-          randomQuestion(count).then(response => {
-            setQuestion(response);
-          });
         } else {
-          randomQuestion(count).then(response => {
-            setQuestion(response);
-          });
           setAnswerDetails("The answer is wrong. Please try again.");
         }
       } else {
@@ -143,12 +142,10 @@ const mapDispatchToProps = dispatch => {
         type: actionTypes.SET_ATTEMPTS,
         payload: attempts
       }),
-    getUserId: userId =>
-      dispatch({
-        type: actionTypes.GET_USERID,
-        payload: userId
-      })
+    fetchGameStats: userId =>
+        dispatch(fetchGameStats(userId)),
   };
 };
+
 
 export default connect(null, mapDispatchToProps)(Question);

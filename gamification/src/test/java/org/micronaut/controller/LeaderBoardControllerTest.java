@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.micronaut.domain.LeaderBoard;
 import org.micronaut.domain.Result;
 import org.micronaut.domain.ResultTrivia;
-import org.micronaut.domain.ScoreCard;
+import org.micronaut.collection.ScoreCard;
 import org.micronaut.service.GameService;
 import org.micronaut.service.GameServiceImpl;
 import org.micronaut.service.LeaderBoardService;

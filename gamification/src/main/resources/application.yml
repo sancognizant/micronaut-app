@@ -8,8 +8,8 @@ micronaut:
       enabled: true
 
 ---
-#mongodb:
-#  uri: "mongodb://${MONGO_HOST:localhost}:${MONGO_PORT:27017}"
+mongodb:
+  uri: "mongodb+srv://ashismohanty:ashis_21@cluster0-iftvw.mongodb.net/test?retryWrites=true&w=majority"
 datasources:
   default:
     url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE

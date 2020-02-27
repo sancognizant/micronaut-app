@@ -14,6 +14,7 @@ import org.micronaut.domain.ScoreCard;
 import org.micronaut.service.GameService;
 import org.micronaut.service.LeaderBoardService;
 
+import javax.inject.Inject;
 import java.util.List;
 
 
@@ -21,21 +22,18 @@ import java.util.List;
 @Validated
 public class LeaderBoardController {
 
+    @Inject
     private LeaderBoardService leaderBoardService;
 
+    @Inject
     private GameService gameService;
-
-    public LeaderBoardController(LeaderBoardService leaderBoardService, GameService gameService) {
-        this.leaderBoardService = leaderBoardService;
-        this.gameService = gameService;
-    }
 
     // getting the results from Trivia app
     @Post(value = "/results", consumes = MediaType.APPLICATION_JSON)
     public HttpResponse<Result> save(@Body ResultTrivia resultTrivia) {
            Result result = gameService.createNewResult(resultTrivia);
            gameService.newAttemptForUser(result);
-            return HttpResponse.ok(result);
+           return HttpResponse.ok(result);
     }
 
     // getting all the leaderboard

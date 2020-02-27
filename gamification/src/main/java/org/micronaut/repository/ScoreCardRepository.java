@@ -1,36 +1,49 @@
 package org.micronaut.repository;
 
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
+import com.mongodb.reactivestreams.client.MongoClient;
+import com.mongodb.reactivestreams.client.MongoCollection;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
-import org.micronaut.domain.ScoreCard;
+import io.reactivex.Single;
+import org.bson.Document;
+import org.micronaut.collection.ScoreCard;
+import org.micronaut.util.GamificationConst;
+import org.reactivestreams.Publisher;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.validation.Valid;
+import java.util.Arrays;
 
 @Repository
-public abstract class ScoreCardRepository implements CrudRepository<ScoreCard, Long> {
+public class ScoreCardRepository {
 
-    private final EntityManager entityManager;
-    private final String query = "SELECT s.userId, SUM(s.score) " +
-            "FROM org.micronaut.domain.ScoreCard s " +
-            "GROUP BY s.userId ORDER BY SUM(s.score) DESC";
+    public static final String COLLECTION_NAME = "scorecard";
 
-    public ScoreCardRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    @Inject
+    private MongoClient mongoClient;
+
+    public Publisher<ScoreCard> findAllScoresByUserId(long userId) {
+        return getCollection().find(Filters.eq("userId", userId));
+    };
+
+    public Publisher<Long> countByUserId(long userId) {
+        return getCollection().countDocuments(Filters.eq("userId", userId));
+    };
+
+    public Publisher<Document> findAllLeaders() {
+        return getCollection().aggregate(Arrays.asList(
+                Aggregates.group("$" + "userId", Accumulators.sum("score", "$score")),
+                Aggregates.sort(new Document("score", -1))));
     }
 
-    public abstract int findSumScoreByUserId(long userId);
-
-    public abstract int countByUserId(long userId);
-
-
-    @Transactional
-    public List<Object[]> findAllLeaders() {
-        return entityManager.createQuery(this.query)
-                .getResultList();
+    public Single<ScoreCard> save(@Valid ScoreCard scoreCard) {
+        return Single.fromPublisher(getCollection().insertOne(scoreCard)).map(success -> scoreCard);
     }
 
-    @Override
-    public abstract ScoreCard save(ScoreCard scoreCard);
+    private MongoCollection<ScoreCard> getCollection() {
+        return mongoClient.getDatabase(GamificationConst.DB_NAME).getCollection(COLLECTION_NAME, ScoreCard.class);
+    }
 }

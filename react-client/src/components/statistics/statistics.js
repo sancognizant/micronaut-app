@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import "./statistics.css";
+import { getGameStats } from "../../utils/service";
 
 const Statistics = props => {
- const [gamestats, setGameStats] = useState({});
+  const [gamestats, setGameStats] = useState({});
 
   useEffect(() => {
-    setGameStats(props.gameStats);
+    if (props.userId) {
+      const timer = setInterval(
+        () => getGameStats(props.userId).then(res => setGameStats(res)),
+        3000
+      );
+
+      return () => clearInterval(timer);
+    }
   });
 
   return (
@@ -34,9 +42,7 @@ const Statistics = props => {
 
 const mapStateToProps = state => {
   return {
-     gameStats: state.gameStats,
-    loading: state.loading,
-    error: state.error
+    userId: state.userId
   };
 };
 

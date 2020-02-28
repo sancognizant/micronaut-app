@@ -1,8 +1,6 @@
-import Config from "../config/config";
-
 // generating randomQuestions
 const randomQuestion = async count => {
-  let response = await fetch(`${Config.triviaPort}/questions/${count}`);
+  let response = await fetch(`http://localhost:8080/questions/${count}`);
   let data = await response.json();
 
   const newData = {
@@ -16,7 +14,7 @@ const randomQuestion = async count => {
 
 // submitting answer to back-end
 const postResult = payLoad => {
-  return fetch(`${Config.triviaPort}/results`, {
+  return fetch("http://localhost:8080/results", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -28,7 +26,7 @@ const postResult = payLoad => {
 };
 
 const highScores = () => {
-  return fetch(`${Config.gamificationPort}/scorecard/leaderboard`, {
+  return fetch(`http://localhost:5000/scorecard/leaderboard`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -43,7 +41,7 @@ const highScores = () => {
 
 //getting a user's gamestats
 const getGameStats = userId => {
-  return fetch(`${Config.gamificationPort}/scorecard/gamestats/${userId}`, {
+  return fetch(`http://localhost:5000/scorecard/gamestats/${userId}`, {
     method: "GET",
     headers: {
       Accept: "application/json",

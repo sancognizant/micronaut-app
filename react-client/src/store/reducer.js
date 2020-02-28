@@ -1,16 +1,15 @@
 import * as actionTypes from './actions';
 
-
 const initialState = {
   attemptList: [],
-  gameStats: {},
-  loading: false, 
-  error: null
+  userId: 0
+
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ANSWER_QUESTION: {
+     // console.log('Action', action);
       return {
         ...state,
         attemptList: [...state.attemptList, action.payload]
@@ -22,30 +21,13 @@ const reducer = (state = initialState, action) => {
         attemptList: action.payload
       };
     }
-    case actionTypes.FETCH_GAMESTATS_BEGIN: {
+
+    case actionTypes.GET_USERID: {
       return {
         ...state,
-        loading: true,
-        error: null
+        userId: action.payload
       };
     }
-
-      case actionTypes.FETCH_GAMESTATS_SUCCESS: {
-        return {
-          ...state,
-          loading: false,
-          gameStats: action.payload
-        };
-      }
-
-      case actionTypes.FETCH_GAMESTATS_FAILURE: {
-        return {
-          ...state,
-          loading: false,
-          error: action.payload,
-          gameStats: {}
-        };
-      }
 
 
     

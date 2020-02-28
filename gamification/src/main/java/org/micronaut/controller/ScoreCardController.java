@@ -6,19 +6,18 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.validation.Validated;
+import lombok.ToString;
 import org.micronaut.domain.GameStats;
 import org.micronaut.service.GameService;
+
+import javax.inject.Inject;
 
 @Controller("/scorecard")
 @Validated
 public class ScoreCardController {
 
-
+    @Inject
     private GameService gameService;
-
-    public ScoreCardController(GameService gameService) {
-        this.gameService = gameService;
-    }
 
     @Get(value = "gamestats/{userId}", produces = MediaType.APPLICATION_JSON)
     public HttpResponse<GameStats> gameStatsUser(@PathVariable long userId) {

@@ -18,7 +18,9 @@ import org.micronaut.service.TriviaServiceImpl;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
@@ -50,10 +52,16 @@ public class TriviaResultControllerTest {
         user.setName("name");
         user.setId(1l);
 
+        List<Choice> choices = new ArrayList<>();
+
+        choices.add(new Choice(1l,"Obama"));
+        choices.add(new Choice(2l,"Trump"));
+        choices.add(new Choice(1l,"Lincoln"));
+
         Response response1 = new Response();
         response1.setAnswer("Trump");
         response1.setQuestion("Who is the president of the USA");
-        response1.setChoices("Obama|Trump|Lincon");
+        response1.setChoices(choices);
         response1.setCorrectAnswer(1);
         response1.setUser(user);
 

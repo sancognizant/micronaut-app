@@ -5,12 +5,14 @@ import io.micronaut.test.annotation.MicronautTest;
 import io.micronaut.test.annotation.MockBean;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.micronaut.domain.Choice;
 import org.micronaut.domain.Trivia;
 import org.micronaut.domain.User;
 import org.micronaut.repository.TriviaRepository;
 import org.micronaut.repository.UserRepository;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,10 +34,15 @@ public class TriviaServiceTest {
 
     @Test
     void getTrivia(){
+        List<Choice> choices = new ArrayList<>();
+
+        choices.add(new Choice(1l,"Obama"));
+        choices.add(new Choice(2l,"Trump"));
+        choices.add(new Choice(1l,"Lincoln"));
+
         List<Trivia> list = Arrays.asList(new Trivia("Who is the president of the USA",
-                "Obama|Trump|Lincon", 1),
-                new Trivia("What's the real name of Spiderman", "" +
-                        "Peter Parker|Peter Pan|John Stark", 2));
+                        choices, 1),
+                new Trivia("What's the real name of Spiderman", choices, 2));
 
         when(triviaRepository.findAll()).thenReturn(list);
 

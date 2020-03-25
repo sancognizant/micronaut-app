@@ -3,9 +3,11 @@ package org.micronaut.repository;
 
 import io.micronaut.test.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
+import org.micronaut.domain.Choice;
 import org.micronaut.domain.Trivia;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +23,21 @@ public class TriviaRepositoryImplTest {
     @Test
     void testCrudOperations() {
 
+        List<Choice> choices1 = new ArrayList<>();
+        List<Choice> choices2 = new ArrayList<>();
+
+        choices1.add(new Choice(1l,"Obama"));
+        choices1.add(new Choice(2l,"Trump"));
+        choices1.add(new Choice(1l,"Lincoln"));
+
+        choices2.add(new Choice(1l,"Peter Parker"));
+        choices2.add(new Choice(1l,"Peter Pan"));
+        choices2.add(new Choice(1l,"Pan Parker"));
+
         Trivia trivia1 = new Trivia("Who is the president of the USA",
-                "Obama|Trump|Lincon", 1);
+                choices1, 1);
         Trivia trivia2 = new Trivia("What's the real name of Spiderman",
-                "Peter Parker|Peter Pan|John Stark", 2);
+                choices2, 2);
 
         triviaRepository.save(trivia1);
         triviaRepository.save(trivia2);

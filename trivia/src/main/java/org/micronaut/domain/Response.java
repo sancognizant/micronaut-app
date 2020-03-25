@@ -3,6 +3,8 @@ package org.micronaut.domain;
 import io.micronaut.core.annotation.Introspected;
 import lombok.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Getter
 @ToString
@@ -15,9 +17,7 @@ public class Response {
 
     private String question;
 
-    private String choices;
+    private List<Choice> choices;
 
     private String answer;
-
-    private int correctAnswer;
 }

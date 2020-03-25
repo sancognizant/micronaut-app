@@ -95,22 +95,22 @@ const Question = props => {
           <div>
             <label>{question.question}</label>
             <div className="choices">
-              {question.choices ? (
-                question.choices.map((choice, index) => {
-                  return (
-                    <div key={index}>
-                      <input
-                        className="radio-btn-choices"
-                        type="radio"
-                        name="site_name"
-                        value={index}
-                        onChange={handleChoices}
-                      />
-                      {choice}
-                    </div>
-                  );
-                })
-              ) : (
+                {question.choices ? (
+                  question.choices.map((choice, index) => {
+                    return (
+                      <div key={index}>
+                        <input
+                          className="radio-btn-choices"
+                          type="radio"
+                          name="site_name"
+                          value={index}
+                          onChange={handleChoices}
+                        />
+                        {choice}
+                      </div>
+                    );
+                  })
+                ) : (
                 <span>Loading Questions ....</span>
               )}
             </div>
